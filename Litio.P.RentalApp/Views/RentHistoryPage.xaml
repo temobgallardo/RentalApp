@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Litio.P.RentalApp.ViewModels"
+             xmlns:contracts="clr-namespace:Litio.P.RentalApp.Contracts"
+             x:Class="Litio.P.RentalApp.Views.RentHistoryPage"
+             Title="{Binding}"
+             x:DataType="viewmodels:RentHistoryViewModel">
+    <ContentPage.Content>
+        <ListView ItemsSource="{Binding}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="contracts:IAutomobile">
+                    <ViewCell>
+                        <Frame Style="{StaticResource BlueFrame}"
+                               HeightRequest="50"
+                               WidthRequest="200">
+                            <StackLayout>
+                                <Label Text="{Binding Name}"
+                                       Style="{StaticResource BlueInfoLabel}" />
+                                <Label Text="{Binding Price}"
+                                       Style="{StaticResource BlueInfoLabel}" />
+                            </StackLayout>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>

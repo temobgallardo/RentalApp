@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:Litio.P.RentalApp.Converters"
+             xmlns:viewmodels="clr-namespace:Litio.P.RentalApp.ViewModels"
+             xmlns:contractsModels="clr-namespace:Litio.P.RentalApp.Contracts"
+             xmlns:resx="clr-namespace:Litio.P.RentalApp.Resources"
+             x:Class="Litio.P.RentalApp.Views.RentVehiclePage"
+             x:DataType="viewmodels:RentVehicleViewModel">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:IntToDecimalConverter x:Key="intToDecimal" />
+            <converters:TimeTypeToStringConverter x:Key="timeTypeToString" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid CompressedLayout.IsHeadless="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Frame BackgroundColor="#2196F3"
+                   Margin="12"
+                   Style="{StaticResource BlueFrame}"
+                   HasShadow="True"
+                   Grid.Row="0">
+                <Label Text="What vehicle would you like to rent?"
+                       HorizontalTextAlignment="Center"
+                       TextColor="White"
+                       FontSize="24"
+                       FontAttributes="Bold" />
+            </Frame>
+            <CarouselView ItemsSource="{Binding Automobiles}"
+                          CurrentItem="{Binding Current}"
+                          HeightRequest="70"
+                          Margin="12"
+                          Grid.Row="1">
+                <CarouselView.ItemTemplate>
+                    <DataTemplate x:DataType="contractsModels:IAutomobile">
+                        <StackLayout CompressedLayout.IsHeadless="True"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center">
+                            <Frame Style="{StaticResource BlueFrame}"
+                                   HeightRequest="50"
+                                   WidthRequest="200"
+                                   HasShadow="True">
+                                <Label Text="{Binding Name}"
+                                       Style="{StaticResource BlueInfoLabel}"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center"
+                                       TextColor="White" />
+                            </Frame>
+                        </StackLayout>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+            <Label HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Style="{StaticResource BlueInfoLabel}"
+                   Grid.Row="2">
+                <Label.Text>
+                    <MultiBinding StringFormat="{x:Static resx:AppResource.RentVehicle_PriceDescription}">
+                        <Binding Path="Automobile.Price" />
+                        <Binding Path="Automobile.TimeType"
+                                 Converter="{StaticResource timeTypeToString}" />
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+            <Entry Text="{Binding Current.RentTime, Mode=OneWayToSource, Converter={StaticResource intToDecimal}}"
+                   Placeholder="{Binding Current.TimeType, StringFormat={x:Static resx:AppResource.RentVehicle_DurationPlaceHolder}}"
+                   ClearButtonVisibility="WhileEditing"
+                   Keyboard="Numeric"
+                   FontSize="22"
+                   Margin="12"
+                   Grid.Row="3" />
+            <Label Text="{Binding Current.Total, StringFormat={x:Static resx:AppResource.RentVehicle_TotalRentPricePlaceHolder}, Converter={StaticResource intToDecimal}}"
+                   Style="{StaticResource BlueInfoLabel}"
+                   HorizontalOptions="End"
+                   Grid.Row="4" />
+            <StackLayout CompressedLayout.IsHeadless="True"
+                         Orientation="Horizontal"
+                         HorizontalOptions="EndAndExpand"
+                         VerticalOptions="EndAndExpand"
+                         Margin="12"
+                         Grid.Row="5">
+                <Button Text="Rent"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="RentHistoryPage"
+                        Style="{StaticResource BlueButton}"
+                        HorizontalOptions="End" />
+                <Button Text="Cancel"
+                        Command="{Binding GoHomeCommand}"
+                        Style="{StaticResource BlueButton}"
+                        HorizontalOptions="End" />
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
